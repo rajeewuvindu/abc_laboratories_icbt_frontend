@@ -1,0 +1,29 @@
+.reports-container {
+    margin: 20px;
+}
+
+.title {
+    color: #333;
+}
+
+.reports-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.report-card {
+    width: 300px;
+    margin: 10px;
+}
+
+.report-card .card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.report-card .btn-primary {
+    margin-top: 10px;
+    width: 100%;
+}

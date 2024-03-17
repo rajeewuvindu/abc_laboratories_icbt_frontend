@@ -4,15 +4,25 @@ import { BrowserRouter, Route, Router, Routes } from 'react-router-dom';
 import './App.css';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import NavigationBar from './NavBar';
+import Appointments from './pages/Appointments';
+import Payments from './pages/Payments';
+import Reports from './pages/Reports';
+import Home from './pages/Home';
 
 function App() {
   return (
 
     <>
       <BrowserRouter>
+      <NavigationBar />
         <Routes>
-          <Route path="/" element={<Register />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/appointments" element={<Appointments />} />
+          <Route path="/payments" element={<Payments />} />
+          <Route path="/reports" element={<Reports />} />
         </Routes>
       </BrowserRouter>
     </>

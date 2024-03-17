@@ -1,0 +1,27 @@
+.payments-container {
+    margin: 20px;
+}
+
+.title {
+    color: #333;
+}
+
+.payments-table {
+    width: 100%;
+}
+
+.payment-row:hover {
+    background-color: #f0f0f0;
+}
+
+.payment-row td {
+    padding: 10px;
+}
+
+.payment-row td:first-child {
+    font-weight: bold;
+}
+
+.payment-row td:last-child {
+    text-align: right;
+}
