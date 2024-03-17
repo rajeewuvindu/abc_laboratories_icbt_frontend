@@ -40,11 +40,11 @@ function Appointments() {
         let selected_appointment_id = document.getElementById('selected_appointment_id').value
         let selected_appointment_price = document.getElementById('selected_appointment_price').value
 
-        console.log(card_number, "card_number")
-        console.log(expiry_date, "expiry_date")
-        console.log(cvv, "cvv")
-        console.log(selected_appointment_id, "selected_appointment_id")
-        console.log(selected_appointment_price, "selected_appointment_price")
+        // console.log(card_number, "card_number")
+        // console.log(expiry_date, "expiry_date")
+        // console.log(cvv, "cvv")
+        // console.log(selected_appointment_id, "selected_appointment_id")
+        // console.log(selected_appointment_price, "selected_appointment_price")
 
         const token = localStorage.getItem('token');
 
@@ -60,11 +60,11 @@ function Appointments() {
             // console.log(response)
             if (response.status == 200) {
                 alert(response.data.message)
-
+                setShowModal(false)
                 // alert("Payment Done Successfully")
 
                 // history.push('/');
-                // window.location.reload('/appointments')
+                window.location.reload('/appointments')
 
             } else {
                 // console.log
@@ -103,7 +103,7 @@ function Appointments() {
     }
     // Function to handle modal show/hide
     const handleModal = (appointment) => {
-        if (appointment.status != "paid") {
+        if (appointment.status != "paid" && appointment.doctor && appointment.price != null && appointment.price != '') {
             setSelectedAppointment(appointment);
             setShowModal(!showModal);
         }
@@ -133,7 +133,7 @@ function Appointments() {
                     </thead>
                     <tbody>
                         {Appointments.map(appointment => (
-                            <tr key={appointment.id} onClick={() => handleModal(appointment)} style={{height: '93.4px'}}>
+                            <tr key={appointment.id} onClick={() => handleModal(appointment)} style={{ height: '93.4px' }}>
                                 {
                                     appointment.date ? <td>{appointment.date}</td> : <td>Not Assigned</td>
                                 }
@@ -158,7 +158,7 @@ function Appointments() {
                 </Table>
 
                 {/* Modal for showing appointment details */}
-                <Modal show={showModal} onHide={handleModal}>
+                <Modal show={showModal} onHide={handleModalClose}>
                     <Modal.Header closeButton>
                         <Modal.Title>Appointment Details</Modal.Title>
                     </Modal.Header>
@@ -167,10 +167,19 @@ function Appointments() {
                             <div>
                                 <p><strong>Date:</strong> {selectedAppointment.date}</p>
                                 <p><strong>Time:</strong> {selectedAppointment.time}</p>
-                                <p><strong>Doctor:</strong> {selectedAppointment.doctor.name}</p>
-                                <p><strong>Price:</strong> {selectedAppointment.price}</p>
+                                {
+                                    selectedAppointment.doctor ? <p><strong>Doctor:</strong> {selectedAppointment.doctor.name}</p> : <p><strong>Doctor:</strong> Not Assigned Yet</p>
+
+                                }
+                                {
+                                    selectedAppointment.price ? <p><strong>Price:</strong> {selectedAppointment.price}</p> : <p><strong>Price:</strong> Not Assigned Yet</p>
+                                }
+
                                 <input type='hidden' id='selected_appointment_id' value={selectedAppointment.id} />
-                                <input type='hidden' id='selected_appointment_price' value={selectedAppointment.price} />
+                                {
+                                    selectedAppointment.price ? <input type='hidden' id='selected_appointment_price' value={selectedAppointment.price} /> : null
+                                
+                                }
                             </div>
                         )}
                         <form onSubmit={handleOnFormSubmit}>
