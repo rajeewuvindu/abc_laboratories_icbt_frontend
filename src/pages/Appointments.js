@@ -3,6 +3,7 @@ import { Card, Table, Modal, Button, Form, Container } from 'react-bootstrap';
 import axios from 'axios';
 
 import HOST_URL from '../config';
+import { Oval } from 'react-loader-spinner';
 
 function Appointments() {
     // Sample appointments data
@@ -114,6 +115,14 @@ function Appointments() {
         setShowModal(!showModal);
     };
 
+    const convertTo12HourFormat = (timeString) => {
+        const [hours, minutes] = timeString.split(':');
+        const ampm = parseInt(hours, 10) < 12 ? 'AM' : 'PM';
+        let formattedHours = parseInt(hours, 10) % 12;
+        formattedHours = formattedHours === 0 ? 12 : formattedHours;
+        return `${formattedHours}:${minutes} ${ampm}`;
+    };
+
     return (
         <Container style={{ minHeight: '100%' }}>
             <div>
@@ -123,26 +132,27 @@ function Appointments() {
                 <Table striped bordered hover responsive style={{ borderRadius: "15px", borderCollapse: 'separate', borderSpacing: '0 15px', marginTop: '20px', backgroundColor: "#E2EFF0" }} data-height="500" data-pagination={true} data-search={true}>
                     <thead>
                         <tr>
-                            <th style={{ backgroundColor: '#E2EFF0', color: '#fffff' }}>Date</th>
-                            <th style={{ backgroundColor: '#E2EFF0', color: '#fffff' }}>Time</th>
-                            <th style={{ backgroundColor: '#E2EFF0', color: '#fffff' }}>Status</th>
-                            <th style={{ backgroundColor: '#E2EFF0', color: '#fffff' }}>Test Type</th>
-                            <th style={{ backgroundColor: '#E2EFF0', color: '#fffff' }}>Doctor</th>
-                            <th style={{ backgroundColor: '#E2EFF0', color: '#fffff' }}>Price</th>
+                            <th style={{ backgroundColor: '#E2EFF0', color: '#fffff' }} className='text-center'>Date</th>
+                            <th style={{ backgroundColor: '#E2EFF0', color: '#fffff' }} className='text-center'>Time</th>
+                            <th style={{ backgroundColor: '#E2EFF0', color: '#fffff' }} className='text-center'>Status</th>
+                            <th style={{ backgroundColor: '#E2EFF0', color: '#fffff' }} className='text-center'>Test Type</th>
+                            <th style={{ backgroundColor: '#E2EFF0', color: '#fffff' }} className='text-center'>Doctor</th>
+                            <th style={{ backgroundColor: '#E2EFF0', color: '#fffff' }} className='text-center'>Price</th>
+                            <th style={{ backgroundColor: '#E2EFF0', color: '#fffff' }} className='text-center'>Requested Date</th>
                         </tr>
                     </thead>
                     <tbody>
                         {Appointments.map(appointment => (
                             <tr key={appointment.id} onClick={() => handleModal(appointment)} style={{ height: '93.4px' }}>
                                 {
-                                    appointment.date ? <td>{appointment.date}</td> : <td>Not Assigned</td>
+                                    appointment.date ? <td>{new Date(appointment.date).toLocaleDateString()}</td> : <td>Not Assigned</td>
                                 }
 
                                 {
-                                    appointment.time ? <td>{appointment.time}</td> : <td>Not Assigned</td>
+                                    appointment.time ? <td>{convertTo12HourFormat(appointment.time)}</td> : <td>Not Assigned</td>
                                 }
 
-                                <td>{appointment.status}</td>
+                                <td className='text-center'>{appointment.status.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}</td>
                                 <td>{appointment.test_type.test_type}</td>
 
                                 {
@@ -151,6 +161,10 @@ function Appointments() {
 
                                 {
                                     appointment.price ? <td>{appointment.price}</td> : <td>Not Given</td>
+                                }
+
+                                {
+                                    appointment.created_at ? <td>{new Date(appointment.created_at).toLocaleString()}</td> : <td>Not Given</td>
                                 }
                             </tr>
                         ))}
@@ -178,7 +192,7 @@ function Appointments() {
                                 <input type='hidden' id='selected_appointment_id' value={selectedAppointment.id} />
                                 {
                                     selectedAppointment.price ? <input type='hidden' id='selected_appointment_price' value={selectedAppointment.price} /> : null
-                                
+
                                 }
                             </div>
                         )}
@@ -196,7 +210,37 @@ function Appointments() {
                                 <Form.Label>CVV</Form.Label>
                                 <Form.Control type="text" id='cvv' placeholder="CVV" />
                             </Form.Group>
-                            <input type='submit' className='btn btn-primary' />
+
+                            {isLoading ? (
+                                <div className="spinner" style={{
+                                    marginBottom: "20px",
+                                    display: "flex",
+                                    justifyContent: "center"
+                                }}>
+                                    <Oval
+                                        height={40}
+                                        width={40}
+                                        color="#4fa94d"
+                                        wrapperStyle={{}}
+                                        wrapperClass=""
+                                        visible={true}
+                                        ariaLabel='oval-loading'
+                                        secondaryColor="#4fa94d"
+                                        strokeWidth={2}
+                                        strokeWidthSecondary={2}
+
+                                    />
+                                </div>
+                            ) : (
+                                <div className="d-grid">
+                                    <input type='submit' className='btn text-white col-12 mt-3' style={{ backgroundColor: "#07a888" }} value={"Proceed"} />
+                                </div>
+                                // <div>
+                                //     <button className="fluid ui blue basic button">Log in</button>
+                                // </div>
+                            )}
+
+                            {/* <input type='submit' className='btn btn-primary' /> */}
 
                             {/* <Button variant="primary" type="submit">
                             Submit Payment

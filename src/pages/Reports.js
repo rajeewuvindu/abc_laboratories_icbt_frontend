@@ -60,10 +60,11 @@ function Reports() {
                     <h1 className="title">Reports</h1>
                 </Container>
                 <Table striped bordered hover responsive style={{ borderRadius: "15px", borderCollapse: 'separate', borderSpacing: '0 15px', marginTop: '20px', backgroundColor: "#E2EFF0" }} data-height="500" data-pagination={true} data-search={true}>
+                    {/* <Table striped bordered hover responsive style={{ borderRadius: "15px", borderCollapse: 'separate', borderSpacing: '0 15px', marginTop: '20px', backgroundColor: "#E2EFF0" }} data-height="500" data-pagination={true} data-search={true}> */}
                     <thead>
                         <tr>
-                            <th className='text-center'>Appointment ID</th>
-                            <th className='text-center'>File</th>
+                            <th style={{ backgroundColor: '#E2EFF0', color: '#fffff' }}>Appointment ID</th>
+                            <th style={{ backgroundColor: '#E2EFF0', color: '#fffff' }}>File</th>
                         </tr>
                     </thead>
                     <tbody>

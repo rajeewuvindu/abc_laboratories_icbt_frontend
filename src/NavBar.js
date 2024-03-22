@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Navbar, Nav, Container } from 'react-bootstrap';
+import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import HOST_URL from './config';
+import { useNavigate } from 'react-router-dom';
 
-function NavigationBar() {
+function NavigationBar({loggedIn}) {
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         checkAuth()
-    }, []);
+    }, [loggedIn]);
 
     const checkAuth = async () => {
         try {
@@ -21,6 +23,28 @@ function NavigationBar() {
             }).then(response => {
                 if (response) {
                     setIsLoggedIn(true)
+                }
+
+            })
+        } catch (error) {
+            console.log(error)
+            setIsLoggedIn(false)
+        }
+    }
+    const handleOnLogoutClicked = async () => {
+        // alert("CICKE")
+        try {
+            const token = localStorage.getItem('token');
+            // API request
+            await axios.post(`${HOST_URL}api/logout`, {}, {
+                headers: { 'Authorization': `Bearer ${token}` },
+            }).then(response => {
+                // alert(response.data.message)
+                if (response) {
+                    setIsLoggedIn(false)
+                    localStorage.setItem('token', null);
+                    localStorage.setItem('user', null);
+                    navigate('/login');
                 }
 
             })
@@ -48,7 +72,7 @@ function NavigationBar() {
         //         </Navbar.Collapse>
         //     </Container>
         // </Navbar>
-        <nav className="navbar navbar-expand-lg" style={{backgroundColor: "#171717"}}>
+        <nav className="navbar navbar-expand-lg" style={{ backgroundColor: "#171717" }}>
             <div className="container">
                 <Link className="navbar-brand text-white" to="/">ABC Laboratories</Link>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,16 +94,27 @@ function NavigationBar() {
                 {
                     isLoggedIn &&
                     <div className="ms-auto">
-                        <ul className="navbar-nav">
-                            <li className="nav-item">
+                        <ul className="navbar-nav d-flex">
+                            <li className="nav-item btn_nav">
                                 <Link className="nav-link text-white" to="/appointments">Appointments</Link>
                             </li>
-                            <li className="nav-item">
+                            <li className="nav-item btn_nav">
                                 <Link className="nav-link text-white" to="/payments">Payments</Link>
                             </li>
-                            <li className="nav-item">
+                            <li className="nav-item btn_nav">
                                 <Link className="nav-link text-white" to="/reports">Reports</Link>
                             </li>
+                            <li className="nav-item btn_nav">
+                                <Link className="nav-link text-white" to="/profile">Profile</Link>
+                            </li>
+                            
+                            <div className='d-flex justify-content-center btn_nav'>
+                                <button className="nav-link text-white btn-sm ms-auto" onClick={handleOnLogoutClicked}>Logout</button>
+                            </div>
+
+                            {/* <li className="nav-item d-flex justify-content-center">
+                                <button className="btn btn-outline-light btn-sm" onClick={handleOnLogoutClicked}>Logout</button>
+                            </li> */}
                         </ul>
                     </div>
                 }

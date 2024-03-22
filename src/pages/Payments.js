@@ -72,7 +72,7 @@ function Payments() {
                                 <td className='text-center'>{payment.appointment_id}</td>
                                 <td className='text-center'>{payment.test_type}</td>
                                 <td className='text-center'>{payment.amount}</td>
-                                <td className='text-center'>{payment.created_at}</td>
+                                <td className='text-center'>{new Date(payment.created_at).toLocaleString()}</td>
                                 <td className='text-center'>
                                     <Button variant="primary" onClick={() => openInvoice(payment.invoice_file)}>Open Report</Button>
                                 </td>
