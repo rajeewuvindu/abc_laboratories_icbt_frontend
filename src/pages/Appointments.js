@@ -33,6 +33,7 @@ function Appointments() {
     }, [])
 
     function handleOnFormSubmit(event) {
+        setLoading(true)
         event.preventDefault();
 
         let card_number = document.getElementById('card_number').value
@@ -58,6 +59,7 @@ function Appointments() {
         }, {
             headers: { 'Authorization': `Bearer ${token}` },
         }).then(response => {
+            setLoading(false)
             // console.log(response)
             if (response.status == 200) {
                 alert(response.data.message)
@@ -76,6 +78,7 @@ function Appointments() {
             // localStorage.setItem('token', );
         })
             .catch(error => {
+                setLoading(false)
                 console.log(error);
                 // alert("Failed to Do Payment ", error.response.data.error)
                 // alert("Failed to Sign up")
@@ -196,19 +199,20 @@ function Appointments() {
                                 }
                             </div>
                         )}
+                        <hr></hr>
                         <form onSubmit={handleOnFormSubmit}>
 
                             <Form.Group controlId="cardNumber">
                                 <Form.Label>Card Number</Form.Label>
-                                <Form.Control type="text" id='card_number' placeholder="Enter card number" />
+                                <Form.Control type="text" id='card_number' placeholder="Enter card number" required/>
                             </Form.Group>
                             <Form.Group controlId="expiryDate">
                                 <Form.Label>Expiry Date</Form.Label>
-                                <Form.Control type="text" id='expiry_date' placeholder="MM/YY" />
+                                <Form.Control type="date" id='expiry_date' placeholder="MM/YY" required/>
                             </Form.Group>
                             <Form.Group controlId="cvv">
                                 <Form.Label>CVV</Form.Label>
-                                <Form.Control type="text" id='cvv' placeholder="CVV" />
+                                <Form.Control type="text" id='cvv' placeholder="CVV" required/>
                             </Form.Group>
 
                             {isLoading ? (
